@@ -1,8 +1,8 @@
 %define name	kompozer
 %define version	0.7.10
-%define pre	rc6
+%define pre	0
 %if %pre
-%define release %mkrel 0.%pre.1
+%define release %mkrel -c %pre 1
 %else
 %define release	%mkrel 1
 %endif
