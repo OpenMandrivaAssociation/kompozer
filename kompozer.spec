@@ -12,7 +12,7 @@
 
 #warning: always end release date with 00
 # (it should be the hour of build but it is not significant for rpm)
-%define mozdate 2007082000
+%define mozdate 2007090200
 
 
 Summary:	Web authoring system (unofficial successor to nvu)
