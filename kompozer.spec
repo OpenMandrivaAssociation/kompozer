@@ -7,12 +7,11 @@
 %define release	%mkrel 1
 %endif
 
-%define libname %{name}-%{version}
-%define mozillalibdir %{_libdir}/%{libname}
+%define mozillalibdir %{_libdir}/%{name}
 
 #warning: always end release date with 00
 # (it should be the hour of build but it is not significant for rpm)
-%define mozdate 2007090200
+%define mozdate 2007091700
 
 
 Summary:	Web authoring system (unofficial successor to nvu)
@@ -131,8 +130,8 @@ rm -rf $RPM_BUILD_ROOT
 
 # multiarch files
 %multiarch_binaries $RPM_BUILD_ROOT%{_bindir}/kompozer-config
-%multiarch_includes $RPM_BUILD_ROOT%{_includedir}/%{libname}/mozilla-config.h
-%multiarch_includes $RPM_BUILD_ROOT%{_includedir}/%{libname}/js/jsautocfg.h
+%multiarch_includes $RPM_BUILD_ROOT%{_includedir}/%{name}/mozilla-config.h
+%multiarch_includes $RPM_BUILD_ROOT%{_includedir}/%{name}/js/jsautocfg.h
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
@@ -143,7 +142,7 @@ Exec=%{_bindir}/%{name} %u
 Icon=%{name}
 Terminal=false
 Type=Application
-Categories=GTK;Network;WebDevelopment;
+Categories=GTK;Development;WebDevelopment;X-Mandriva-CrossDesktop;
 EOF
 
 mkdir -p $RPM_BUILD_ROOT%{_iconsdir}/hicolor/{16x16,32x32,48x48}/apps
@@ -152,7 +151,7 @@ convert -scale 32x32  $RPM_BUILD_ROOT%{mozillalibdir}/icons/mozicon50.xpm $RPM_B
 convert -scale 48x48  $RPM_BUILD_ROOT%{mozillalibdir}/icons/mozicon50.xpm $RPM_BUILD_ROOT%{_iconsdir}/hicolor/48x48/apps/%{name}.png 
 
 # install our rebuild file
-bzcat %{SOURCE1} | sed -e "s|mozilla-MOZILLA_VERSION|%{libname}|g;s|LIBDIR|%{_libdir}|g" > \
+bzcat %{SOURCE1} | sed -e "s|mozilla-MOZILLA_VERSION|%{name}-%{version}|g;s|LIBDIR|%{_libdir}|g" > \
   $RPM_BUILD_ROOT%{mozillalibdir}/mozilla-rebuild-databases.pl
 chmod 755 $RPM_BUILD_ROOT%{mozillalibdir}/mozilla-rebuild-databases.pl
 
@@ -232,8 +231,8 @@ umask 022
 %{_libdir}/pkgconfig/*.pc
 %{_bindir}/kompozer-config
 %multiarch %{multiarch_bindir}/kompozer-config
-%{_datadir}/idl/%{libname}
-%{_includedir}/%{libname}
+%{_datadir}/idl/%{name}
+%{_includedir}/%{name}
 %{_datadir}/aclocal/nspr.m4
 %multiarch %{multiarch_includedir}/* 
 
