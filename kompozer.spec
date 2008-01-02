@@ -47,6 +47,7 @@ Patch16:	nvu-gcc4.1-fix.patch
 
 License: GPLv2+ and LGPLv2+ and MPLv1.1
 Group: Development/Other
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 BuildRequires:	ImageMagick
 BuildRequires:  zip tcsh
