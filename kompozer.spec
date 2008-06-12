@@ -185,8 +185,10 @@ touch $RPM_BUILD_ROOT%{mozillalibdir}/components/xpti.dat
 rm -rf $RPM_BUILD_ROOT
 
 %post
+%if %mdkversion < 200900
 %{update_menus}
 %{update_icon_cache hicolor}
+%endif
 if [ "$1" == "2" ]; then
   if [ ! -f %{mozillalibdir}/components.ini -o ! -f %{mozillalibdir}/defaults.ini ]; then
 	#fix older broken install if needed
@@ -200,9 +202,11 @@ umask 022
 %{_bindir}/%{name} -register
 %{mozillalibdir}/mozilla-rebuild-databases.pl
 
+%if %mdkversion < 200900
 %postun
 %{clean_menus}
 %{clean_icon_cache hicolor}
+%endif
 
 %files
 %defattr(-,root,root)
