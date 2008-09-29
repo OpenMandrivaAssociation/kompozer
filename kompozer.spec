@@ -1,3 +1,8 @@
+# underlinking.patch fixes an external underlnking issue, but there's
+# also an internal one that looks hard to fix - AdamW 2008/09
+%define _disable_ld_as_needed		1
+%define _disable_ld_no_undefined	1
+
 %define name	kompozer
 %define version	0.7.10
 %define pre	0
@@ -44,6 +49,8 @@ Patch13:	nvu-1.0-mandriva.patch
 Patch14:	kompozer-0.7.10-browser.patch
 # (couriousous) fix gcc 4.1 build
 Patch16:	nvu-gcc4.1-fix.patch
+# Fix underlinking - AdamW 2008/09
+Patch17:	kompozer-0.7.10-underlinking.patch
 
 License: GPLv2+ and LGPLv2+ and MPLv1.1
 Group: Development/Other
@@ -61,6 +68,7 @@ BuildRequires:	libnss-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libxp-devel
 BuildRequires:	libxt-devel
+BuildRequires:	autoconf2.1
 
 Obsoletes:	nvu
 Provides:	nvu
@@ -104,10 +112,13 @@ Kompozer development files.
 %patch13 -p1 -b .mandriva
 %patch14 -p1 -b .launcher
 %patch16 -p0 -b .gcc4.1
+%patch17 -p1 -b .underlink
 # let jars get compressed
 %__perl -p -i -e 's|\-0|\-9|g' config/make-jars.pl
 
 %build
+# required by underlinking.patch
+autoconf-2.13
 
 export MOZILLA_OFFICIAL=1
 export BUILD_OFFICIAL=1
