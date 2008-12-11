@@ -56,7 +56,7 @@ License: GPLv2+ and LGPLv2+ and MPLv1.1
 Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-BuildRequires:	ImageMagick
+BuildRequires:	imagemagick
 BuildRequires:  zip tcsh
 BuildRequires:	libIDL-devel
 BuildRequires:  libjpeg-devel
