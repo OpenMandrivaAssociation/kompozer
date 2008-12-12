@@ -1,4 +1,4 @@
-# underlinking.patch fixes an external underlnking issue, but there's
+# underlinking.patch fixes an external underlinking issue, but there's
 # also an internal one that looks hard to fix - AdamW 2008/09
 %define _disable_ld_as_needed		1
 %define _disable_ld_no_undefined	1
@@ -9,7 +9,7 @@
 %if %pre
 %define release %mkrel -c %pre 1
 %else
-%define release	%mkrel 3
+%define release	%mkrel 4
 %endif
 
 %define mozillalibdir %{_libdir}/%{name}
@@ -43,14 +43,17 @@ Patch8:		nvu-0.81-gifvulnerability.patch
 Patch9:		nvu-0.81-jsvulnerability.patch
 # (fc) 1.0.2-2mdk add env variable to disable GNOME uri handler (Fedora)
 Patch10:	nvu-0.81-gnome-uriloader.patch
-# (fc) 1.0-3mdk fix user agent
-Patch13:	nvu-1.0-mandriva.patch
+# (fc) 1.0-3mdk fix user agent (rediffed aw 2008/12)
+Patch13:	kompozer-0.7.10-mandriva.patch
 # (fc) 1.0-3mdk fix default app for www/ftp
 Patch14:	kompozer-0.7.10-browser.patch
 # (couriousous) fix gcc 4.1 build
 Patch16:	nvu-gcc4.1-fix.patch
 # Fix underlinking - AdamW 2008/09
 Patch17:	kompozer-0.7.10-underlinking.patch
+# Fix an overflow (which causes app to fail to run when built with
+# fortification, #44830) - thanks Willem van Engen - AdamW 2008/12
+Patch18:	kompozer-0.7.10-overflow.patch
 
 License: GPLv2+ and LGPLv2+ and MPLv1.1
 Group: Development/Other
@@ -113,6 +116,7 @@ Kompozer development files.
 %patch14 -p1 -b .launcher
 %patch16 -p0 -b .gcc4.1
 %patch17 -p1 -b .underlink
+%patch18 -p1 -b .overflow
 # let jars get compressed
 %__perl -p -i -e 's|\-0|\-9|g' config/make-jars.pl
 
