@@ -54,6 +54,8 @@ Patch17:	kompozer-0.7.10-underlinking.patch
 # Fix an overflow (which causes app to fail to run when built with
 # fortification, #44830) - thanks Willem van Engen - AdamW 2008/12
 Patch18:	kompozer-0.7.10-overflow.patch
+Patch19:	kompozer-0.7.10-wformat.patch
+Patch20:	kompozer-0.7.10-gcc44.patch
 
 License: GPLv2+ and LGPLv2+ and MPLv1.1
 Group: Development/Other
@@ -117,6 +119,8 @@ Kompozer development files.
 %patch16 -p0 -b .gcc4.1
 %patch17 -p1 -b .underlink
 %patch18 -p1 -b .overflow
+%patch19 -p1 -b .wformat
+%patch20 -p1 -b .gcc44
 # let jars get compressed
 %__perl -p -i -e 's|\-0|\-9|g' config/make-jars.pl
 
