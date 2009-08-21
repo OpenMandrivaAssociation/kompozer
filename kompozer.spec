@@ -9,7 +9,7 @@
 %if %pre
 %define release %mkrel -c %pre 1
 %else
-%define release	%mkrel 4
+%define release	%mkrel 5
 %endif
 
 %define mozillalibdir %{_libdir}/%{name}
