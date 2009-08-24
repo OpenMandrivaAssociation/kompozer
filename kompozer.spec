@@ -9,7 +9,7 @@
 %if %pre
 %define release %mkrel -c %pre 1
 %else
-%define release	%mkrel 5
+%define release	%mkrel 6
 %endif
 
 %define mozillalibdir %{_libdir}/%{name}
@@ -56,6 +56,7 @@ Patch17:	kompozer-0.7.10-underlinking.patch
 Patch18:	kompozer-0.7.10-overflow.patch
 Patch19:	kompozer-0.7.10-wformat.patch
 Patch20:	kompozer-0.7.10-gcc44.patch
+Patch21:	kompozer-0.7.10-CVE-2009-XXXX.diff
 
 License: GPLv2+ and LGPLv2+ and MPLv1.1
 Group: Development/Other
@@ -121,6 +122,8 @@ Kompozer development files.
 %patch18 -p1 -b .overflow
 %patch19 -p1 -b .wformat
 %patch20 -p1 -b .gcc44
+%patch21 -p0 -b .CVE-2009-XXXX
+
 # let jars get compressed
 %__perl -p -i -e 's|\-0|\-9|g' config/make-jars.pl
 
