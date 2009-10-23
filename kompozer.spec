@@ -1,274 +1,163 @@
-# underlinking.patch fixes an external underlinking issue, but there's
-# also an internal one that looks hard to fix - AdamW 2008/09
-%define _disable_ld_as_needed		1
-%define _disable_ld_no_undefined	1
-
-%define pre a4
+%define name    kompozer
+%define version 0.8
+%define pre b1
 %if %pre
 %define release %mkrel -c %pre 1
 %else
 %define release	%mkrel 1
 %endif
 
-%define mozillalibdir %{_libdir}/%{name}
+%define cairo_version 0.5
 
-#warning: always end release date with 00
-# (it should be the hour of build but it is not significant for rpm)
-# MOZ_BUILD_DATE = perl -Imozilla/config mozilla/config/bdate.pl minus one ?
-%define mozdate 2009082500
+%define minimum_build_nspr_version 4.7.2
+%define minimum_build_nss_version 3.12
 
-Summary:	Web authoring system (unofficial successor to nvu)
-Name:		kompozer
-Version:	0.8
-Release:	%{release}
-License:	GPLv2+ and LGPLv2+ and MPLv1.1
-Group:		Development/Other
-URL:		http://www.kompozer.net
+
+Name:           %{name}
+Version:        %{version}
+Release:        %{release}
+Summary:        Web Authoring System
+
+Group:          Applications/Publishing
+License:        GPLv2+ or LGPLv2+ or MPL
+URL:            http://www.kompozer.net/
 %if %pre
 Source0:	http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}%{pre}-src.tar.bz2
 %else
 Source0:	http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.bz2
 %endif
-Source1:	nvu-rebuild-databases.pl.in.generatechrome.bz2
-Source2:	nvu-generate-chrome.sh.bz2
-Patch0:		nvu-freetype2.patch
-Patch4:		nvu-locale.patch
-# (fc) 1.0.2-2mdk add env variable to disable GNOME uri handler (Fedora)
-Patch10:	nvu-0.81-gnome-uriloader.patch
-# (fc) 1.0-3mdk fix user agent (rediffed aw 2008/12)
-Patch13:	kompozer-0.7.10-mandriva.patch
-# (couriousous) fix gcc 4.1 build
-Patch16:	nvu-gcc4.1-fix.patch
-# Fix underlinking - AdamW 2008/09
-Patch17:	kompozer-0.7.10-underlinking.patch
-# Fix an overflow (which causes app to fail to run when built with
-# fortification, #44830) - thanks Willem van Engen - AdamW 2008/12
-Patch18:	kompozer-0.7.10-overflow.patch
-Patch19:	kompozer-0.8-format_not_a_string_literal_and_no_format_arguments.diff
-Patch21:	kompozer-0.7.10-CVE-2009-XXXX.diff
-BuildRequires:	autoconf2.1
-BuildRequires:	gnome-vfs2-devel
-BuildRequires:	gtk+2-devel >= 2.4.0
-BuildRequires:	imagemagick
-BuildRequires:	libgnome2-devel
-BuildRequires:	libgnomeui2-devel
-BuildRequires:	libIDL-devel
-BuildRequires:	libjpeg-devel
-BuildRequires:	libpng-devel
-BuildRequires:	libxft-devel
-BuildRequires:	libxp-devel
-BuildRequires:	libxt-devel
-BuildRequires:	nspr-devel >= 2:4.7.5
-BuildRequires:	nss-devel >= 2:3.12.3.1
-BuildRequires:	nss-static-devel >= 2:3.12.3.1
-BuildRequires:	pango >= 1.5.0
-BuildRequires:	tcsh
-BuildRequires:	zip
-Obsoletes:	nvu
-Provides:	nvu
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Source1:        kompozer-debian-manpage.bz2
 
-# do not provides mozilla lib
-%define _provides_exceptions libnspr4.so\\|libplc4.so\\|libplds4.so\\|libnss\\|libsmime3\\|libsoftokn\\|libssl3\\|libgtkembedmoz.so\\|libxp.*
-%define _requires_exceptions libnspr4.so\\|libplc4.so\\|libplds4.so\\|libnss\\|libsmime3\\|libsoftokn\\|libssl3\\|libgtkembedmoz.so\\|libxp.*
+BuildRequires:  nspr-devel >= %{minimum_build_nspr_version}
+BuildRequires:  nss-devel >= %{minimum_build_nss_version}
+BuildRequires:  nss-static-devel >= %{minimum_build_nss_version}
+BuildRequires:  cairo-devel >= %{cairo_version}
+BuildRequires:  desktop-file-utils
+BuildRequires:  gtk2-devel
+BuildRequires:  gnome-vfs2-devel
+Provides:       nvu = 1
+Obsoletes:      nvu < 1
 
 %description
-Kompozer is a complete Web authoring system that combines web file management
-and easy-to-use WYSIWYG web page editing. Kompozer is designed to be extremely
-easy to use, making it ideal for non-technical computer users who want to
-create an attractive, professional-looking web site without needing to know
-HTML or web coding. 
+A complete Web authoring system for Linux Desktop users, similar to
+Microsoft Windows programs like FrontPage and Dreamweaver.
 
-Kompozer is an unofficial continuation of nvu, which was apparently abandoned
-in 2005.
+KompoZer is an unofficial branch of Nvu, previously developed by
+Linspire Inc.
 
-%package devel
-Summary:        Kompozer development files
-Group:          Development/Other
-Requires:       %{name} = %{version}
-Conflicts:	%mklibname -d js 1
+It makes managing a Web site a snap. Now anyone can create Web pages
+and manage a Web site with no technical expertise or HTML knowledge.
 
-%description devel
-Kompozer development files.
+Features
+
+* WYSIWYG editing of pages, making Web creation as easy as typing a
+   letter with your word processor.
+
+* Integrated file management via FTP.  Simply log in to your Web
+   site and navigate through your files, editing Web pages on the
+   fly, directly from your site.
+
+* Reliable HTML code creation that works with today's most popular
+   browsers.
+
+* Jump between WYSIWYG editing mode and HTML using tabs.
+
+* Tabbed editing to make working on multiple pages a snap.
+
+* Powerful support for frames, forms, tables, and templates.
+
 
 %prep
-
 %setup -q -c %{name}-%{version}
-%setup -T -D -n %{name}-%{version}/mozilla
-%patch0 -p1
-%patch4
-%patch10 -p1 -b .gnome-uriloader
-%patch13 -p1 -b .mandriva
-%patch16 -p0 -b .gcc4.1
-%patch17 -p1 -b .underlink
-%patch18 -p1 -b .overflow
-%patch19 -p1 -b .format_not_a_string_literal_and_no_format_arguments
-%patch21 -p0 -b .CVE-2009-XXXX
-
-# let jars get compressed
-%__perl -p -i -e 's|\-0|\-9|g' config/make-jars.pl
 
 %build
-# required by underlinking.patch
-autoconf-2.13
+cd mozilla/
+cp composer/config/mozconfig.fedora .mozconfig
+#echo "mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-kompozer" >> .mozconfig
+# this is for x64 and x32 compatibility when installing: 
+# echo "mk_add_options \"CONFIGURE_ARGS= --libdir %{_libdir}\"" >> .mozconfig
+echo "ac_add_options --libdir %{_libdir}" >> .mozconfig
+echo "ac_add_options --with-default-mozilla-five-home=%{_libdir}/kompozer" >> .mozconfig
 
-export MOZILLA_OFFICIAL=1
-export BUILD_OFFICIAL=1
-export MOZ_STANDALONE_COMPOSER=1
-export MOZ_BUILD_DATE=%{mozdate}
+make -f client.mk build_all
 
-%define __libtoolize /bin/true
-%define __cputoolize /bin/true
-
-%configure \
-    --enable-application=composer \
-    --with-system-nspr \
-    --with-system-nss \
-    --enable-optimize="%{optflags}" \
-    --disable-debug \
-    --disable-svg \
-    --without-system-mng \
-    --with-system-png \
-    --with-system-jpeg \
-    --disable-ldap \
-    --disable-mailnews \
-    --disable-installer \
-    --disable-activex \
-    --disable-activex-scripting \
-    --disable-tests \
-    --disable-oji \
-    --disable-necko-disk-cache \
-    --enable-single-profile \
-    --disable-profilesharing \
-    --enable-extensions=wallet,spellcheck,xmlextras,pref,universalchardet,inspector \
-    --enable-image-decoders=png,gif,jpeg \
-    --enable-necko-protocols=http,ftp,file,jar,viewsource,res,data \
-    --disable-pedantic \
-    --disable-short-wchar \
-    --enable-xprint \
-    --enable-crypto \
-    --disable-mathml \
-    --with-system-zlib \
-    --enable-toolkit=gtk2 \
-    --enable-default-toolkit=gtk2 \
-    --enable-xft \
-    --disable-updater \
-    --enable-system-cairo \
-    --with-default-mozilla-five-home=%{mozillalibdir}
-
-make
 
 %install
-rm -rf %{buildroot}
+rm -rf $RPM_BUILD_ROOT
 
-%makeinstall_std
+pushd obj-kompozer/xpfe/components && %__make ; popd
+pushd obj-kompozer && %__make install DESTDIR=$RPM_BUILD_ROOT ;popd
 
-# multiarch files
-%multiarch_binaries %{buildroot}%{_bindir}/kompozer-config
-%multiarch_includes %{buildroot}%{_includedir}/%{name}/mozilla-config.h
-%multiarch_includes %{buildroot}%{_includedir}/%{name}/js/jsautocfg.h
+# Remove internal myspell directory and myspell dicts.
+# dh_install symlinks it to /usr/share/myspell where all myspell-* dicts place their stuff
+rm -rf $RPM_BUILD_ROOT/%{_libdir}/kompozer/components/myspell
+# Remove exec bit from .js files to prevent lintian warnings.
+chmod -x $RPM_BUILD_ROOT/%{_libdir}/kompozer/components/*.js
+
+rm -rf $RPM_BUILD_ROOT/usr/include/
+rm -rf $RPM_BUILD_ROOT/%{_datadir}/idl/
+
+#Menu entry
+install -d -m755 %{buildroot}%{_datadir}/applications
 
 mkdir -p %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop <<EOF
 [Desktop Entry]
-Name=Kompozer
-Comment=Web authoring system
-Exec=%{_bindir}/%{name} %u
-Icon=%{name}
+Name=KompoZer
+GenericName=Web Authoring System
+Comment=Create Web Pages
+Comment[es]=Crea páginas web
+Comment[it]=Creare pagine Web
+Comment[fr]=Creation de pages Web
+Exec=%{_bindir}/%{name} 
+Icon=%{_libdir}/kompozer/icons/mozicon50.xpm
 Terminal=false
+MimeType=text/html;text/xml;text/css;text/x-javascript;text/javascript;application/x-php;text/x-php;application/xhtml+xml;
 Type=Application
 Categories=GTK;Development;WebDevelopment;X-Mandriva-CrossDesktop;
 EOF
 
-mkdir -p %{buildroot}%{_iconsdir}/hicolor/{16x16,32x32,48x48}/apps
-install -m 644 %{buildroot}%{mozillalibdir}/icons/mozicon16.xpm  %{buildroot}%{_iconsdir}/hicolor/16x16/apps/%{name}.png
-convert -scale 32x32  %{buildroot}%{mozillalibdir}/icons/mozicon50.xpm %{buildroot}%{_iconsdir}/hicolor/32x32/apps/%{name}.png 
-convert -scale 48x48  %{buildroot}%{mozillalibdir}/icons/mozicon50.xpm %{buildroot}%{_iconsdir}/hicolor/48x48/apps/%{name}.png 
+## instalar el kompozer.desktop
+desktop-file-install  --dir=%{buildroot}%{_datadir}/applications/ %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop 
 
-# install our rebuild file
-bzcat %{SOURCE1} | sed -e "s|mozilla-MOZILLA_VERSION|%{name}-%{version}|g;s|LIBDIR|%{_libdir}|g" > \
-  %{buildroot}%{mozillalibdir}/mozilla-rebuild-databases.pl
-chmod 755 %{buildroot}%{mozillalibdir}/mozilla-rebuild-databases.pl
+# manpage:
+install -d -m755 %{buildroot}%{_mandir}/man1/
+install -m 644 %{SOURCE1} %{buildroot}%{_mandir}/man1/%{name}.1
 
-# install our file to rebuild the chrome registry so that we can
-# produce Kompozer extentions in RPM
-mkdir -p %{buildroot}%{mozillalibdir}/chrome/rc.d
-bzcat %{SOURCE2} > \
-  %{buildroot}%{mozillalibdir}/chrome/rc.d/generate-chrome.sh
+# spellchecker support:
+#install -d -m755 %{buildroot}%{_libdir}/kompozer
+install -d -m755 %{buildroot}%{_datadir}/myspell/
+rm -rf %{buildroot}%{_libdir}/kompozer/dictionaries/
+cd %{buildroot}%{_libdir}/kompozer
+#ln -s ../../share/myspell dictionaries
+ln -s %{_datadir}/myspell %{buildroot}%{_libdir}/kompozer/dictionaries
 
-chmod 755 %{buildroot}%{mozillalibdir}/chrome/rc.d/generate-chrome.sh
-
-# remove unpackaged files
-rm -f %{buildroot}%{mozillalibdir}/{libnspr4.so,libplc4.so,libplds4.so,libnss3.so,libnssckbi.so,libsmime3.so,libsoftokn3.so,libssl3.so,libsoftokn3.chk,TestGtkEmbed}
-
-#ghost files
-mkdir -p %{buildroot}%{mozillalibdir}/extensions
-touch %{buildroot}%{mozillalibdir}/chrome/chrome.rdf
-for overlay in {"browser","communicator","editor","inspector","messenger","navigator"}; do
-  %{__mkdir_p} %{buildroot}%{mozillalibdir}/chrome/overlayinfo/$overlay/content
-  touch %{buildroot}%{mozillalibdir}/chrome/overlayinfo/$overlay/content/overlays.rdf
-done
-touch %{buildroot}%{mozillalibdir}/extensions/installed-extensions-processed.txt
-touch %{buildroot}%{mozillalibdir}/extensions/Extensions.rdf
-touch %{buildroot}%{mozillalibdir}/components.ini
-touch %{buildroot}%{mozillalibdir}/defaults.ini
-touch %{buildroot}%{mozillalibdir}/components/compreg.dat
-touch %{buildroot}%{mozillalibdir}/components/xpti.dat
-
-%post
-%if %mdkversion < 200900
-%update_menus
-%update_icon_cache hicolor
-%endif
-if [ "$1" == "2" ]; then
-  if [ ! -f %{mozillalibdir}/components.ini -o ! -f %{mozillalibdir}/defaults.ini ]; then
-	#fix older broken install if needed
-	rm -f %{mozillalibdir}/components/*.dat
-  fi
-fi
-
-export HOME="/root" MOZ_DISABLE_GNOME=1
-# force correct umask
-umask 022
-%{_bindir}/%{name} -register
-%{mozillalibdir}/mozilla-rebuild-databases.pl
-
-%if %mdkversion < 200900
-%postun
-%clean_menus
-%clean_icon_cache hicolor
-%endif
+# cleaning non used devel and debug files
+rm %{buildroot}%{_bindir}/kompozer-config
+rm -rf %{buildroot}%{_libdir}/pkgconfig/
+rm -rf %{buildroot}%{_libdir}/debug/
 
 %clean
-rm -rf %{buildroot}
+rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root)
-%doc LICENSE LEGAL README.txt
-%{_bindir}/%{name}
-%{_datadir}/applications/*.desktop
-%{_iconsdir}/hicolor/16x16/apps/%{name}.png
-%{_iconsdir}/hicolor/32x32/apps/%{name}.png
-%{_iconsdir}/hicolor/48x48/apps/%{name}.png
-%{mozillalibdir}
-%ghost %{mozillalibdir}/chrome/chrome.rdf
-%ghost %{mozillalibdir}/chrome/overlayinfo/browser/content/overlays.rdf
-%ghost %{mozillalibdir}/chrome/overlayinfo/communicator/content/overlays.rdf
-%ghost %{mozillalibdir}/chrome/overlayinfo/inspector/content/overlays.rdf
-%ghost %{mozillalibdir}/chrome/overlayinfo/messenger/content/overlays.rdf
-%ghost %{mozillalibdir}/chrome/overlayinfo/navigator/content/overlays.rdf
-%ghost %{mozillalibdir}/extensions/Extensions.rdf
-%ghost %{mozillalibdir}/extensions/installed-extensions-processed.txt
-%ghost %{mozillalibdir}/components.ini
-%ghost %{mozillalibdir}/defaults.ini
-%ghost %{mozillalibdir}/components/compreg.dat
-%ghost %{mozillalibdir}/components/xpti.dat
+%defattr(-,root,root,-)
+%doc mozilla/LEGAL mozilla/LICENSE mozilla/README.txt
+%{_bindir}/*
+%{_libdir}/*
+%{_mandir}/man1/*
+%{_datadir}/myspell
+%{_datadir}/applications/mandriva-kompozer.desktop
 
-%files devel
-%defattr(-,root,root)
-%{_libdir}/pkgconfig/*.pc
-%{_bindir}/kompozer-config
-%multiarch %{multiarch_bindir}/kompozer-config
-%{_datadir}/idl/%{name}
-%{_includedir}/%{name}
-%multiarch %{multiarch_includedir}/* 
+%changelog
+* Wed May 13 2009 Ismael Olea <ismael@olea.org> 0.8a4-1
+- update to 0.8a4
+
+* Tue May 12 2009 Ismael Olea <ismael@olea.org> 0.8a3-3
+- fixing paths to build in x64
+
+* Thu May 7 2009 Ismael Olea <ismael@olea.org> 0.8a3-2
+- man page from debian, icon on desktop file, using hunspell dicts
+
+* Thu May 7 2009 Ismael Olea <ismael@olea.org> 0.8a3-1
+- first version
