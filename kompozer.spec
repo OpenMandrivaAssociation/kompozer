@@ -4,7 +4,7 @@
 %if %pre
 %define release %mkrel -c %pre 1
 %else
-%define release	%mkrel 1
+%define release %mkrel 1
 %endif
 
 %define cairo_version 0.5
@@ -17,14 +17,13 @@ Name:           %{name}
 Version:        %{version}
 Release:        %{release}
 Summary:        Web Authoring System
-
-Group:          Applications/Publishing
+Group:          Development/Tools
 License:        GPLv2+ or LGPLv2+ or MPL
 URL:            http://www.kompozer.net/
 %if %pre
-Source0:	http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}%{pre}-src.tar.bz2
+Source0:    http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}%{pre}-src.tar.bz2
 %else
-Source0:	http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.bz2
+Source0:    http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.bz2
 %endif
 Source1:        kompozer-debian-manpage.bz2
 
@@ -37,6 +36,7 @@ BuildRequires:  gtk2-devel
 BuildRequires:  gnome-vfs2-devel
 Provides:       nvu = 1
 Obsoletes:      nvu < 1
+BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 A complete Web authoring system for Linux Desktop users, similar to
