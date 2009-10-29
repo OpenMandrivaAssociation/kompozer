@@ -17,7 +17,7 @@ Name:           %{name}
 Version:        %{version}
 Release:        %{release}
 Summary:        Web Authoring System
-Group:          Development/Tools
+Group:          Development/Other
 License:        GPLv2+ or LGPLv2+ or MPL
 URL:            http://www.kompozer.net/
 %if %pre
