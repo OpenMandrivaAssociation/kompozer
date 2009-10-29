@@ -34,6 +34,7 @@ BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel
 BuildRequires:  gnome-vfs2-devel
+BuildRequires:	zip
 Provides:       nvu = 1
 Obsoletes:      nvu < 1
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
