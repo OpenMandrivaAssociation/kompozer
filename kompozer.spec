@@ -2,9 +2,9 @@
 %define version 0.8
 %define pre b1
 %if %pre
-%define release %mkrel -c %pre 1
+%define release %mkrel -c %pre 2
 %else
-%define release %mkrel 2
+%define release %mkrel 1
 %endif
 
 %define cairo_version 0.5
