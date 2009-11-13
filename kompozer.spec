@@ -149,16 +149,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*
 %{_datadir}/myspell
 %{_datadir}/applications/mandriva-kompozer.desktop
-
-%changelog
-* Wed May 13 2009 Ismael Olea <ismael@olea.org> 0.8a4-1
-- update to 0.8a4
-
-* Tue May 12 2009 Ismael Olea <ismael@olea.org> 0.8a3-3
-- fixing paths to build in x64
-
-* Thu May 7 2009 Ismael Olea <ismael@olea.org> 0.8a3-2
-- man page from debian, icon on desktop file, using hunspell dicts
-
-* Thu May 7 2009 Ismael Olea <ismael@olea.org> 0.8a3-1
-- first version
