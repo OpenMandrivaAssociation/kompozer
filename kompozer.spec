@@ -26,6 +26,7 @@ Source0:    http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}%{pre}-
 Source0:    http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.bz2
 %endif
 Source1:        kompozer-debian-manpage.bz2
+Patch0:	kompozer-0.7.10-CVE-2009-XXXX.diff
 
 BuildRequires:  nspr-devel >= %{minimum_build_nspr_version}
 BuildRequires:  nss-devel >= %{minimum_build_nss_version}
@@ -70,6 +71,7 @@ Features
 
 %prep
 %setup -q -c %{name}-%{version}
+%patch0 -p0 -b .CVE-2009-XXXX
 
 %build
 cd mozilla/
