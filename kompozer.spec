@@ -2,9 +2,9 @@
 %define version 0.8
 %define pre b3
 %if %pre
-%define release %mkrel -c %pre 6
+%define release %mkrel -c %pre 1
 %else
-%define release %mkrel 3
+%define release %mkrel 1
 %endif
 
 %define cairo_version 0.5
@@ -71,7 +71,7 @@ Features
 
 %prep
 %setup -q -c %{name}-%{version}
-%patch0 -p0 -b .CVE-2009-XXXX
+# %patch0 -p0 -b .CVE-2009-XXXX
 %patch1 -p0 -b .CVE-2009-3560
 
 %build
