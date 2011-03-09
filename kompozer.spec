@@ -33,7 +33,7 @@ BuildRequires:  nss-devel >= %{minimum_build_nss_version}
 BuildRequires:  nss-static-devel >= %{minimum_build_nss_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  desktop-file-utils
-BuildRequires:  gtk2-devel
+BuildRequires:  gtk2-devel libxt-devel
 BuildRequires:  gnome-vfs2-devel
 BuildRequires:	zip
 Provides:       nvu = 1
