@@ -2,7 +2,7 @@
 %define version 0.8
 %define pre b3
 %if %pre
-%define release %mkrel -c %pre 2
+%define release %mkrel -c %pre 3
 %else
 %define release %mkrel 2
 %endif
@@ -28,10 +28,12 @@ Source0:    http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}-src.ta
 Source1:        kompozer-debian-manpage.bz2
 Patch0:	kompozer-0.7.10-CVE-2009-XXXX.diff
 Patch1:	kompozer-0.8b1-CVE-2009-3560.diff
+Patch2:	kompozer-0.8-png15-build.patch
 BuildRequires:  nspr-devel >= %{minimum_build_nspr_version}
 BuildRequires:  nss-devel >= %{minimum_build_nss_version}
 BuildRequires:  nss-static-devel >= %{minimum_build_nss_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
+BuildRequires:  pkgconfig(pangox)
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel libxt-devel
 BuildRequires:  gnome-vfs2-devel
@@ -73,6 +75,7 @@ Features
 %setup -q -c %{name}-%{version}
 # %patch0 -p0 -b .CVE-2009-XXXX
 %patch1 -p0 -b .CVE-2009-3560
+%patch2 -p1 -b .png15-build
 
 %build
 cd mozilla/
