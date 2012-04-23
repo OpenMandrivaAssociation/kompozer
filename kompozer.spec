@@ -37,6 +37,7 @@ BuildRequires:  pkgconfig(pangox)
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel libxt-devel
 BuildRequires:  gnome-vfs2-devel
+BuildRequires:  libxft-devel
 BuildRequires:	zip
 Provides:       nvu = 1
 Obsoletes:      nvu < 1
