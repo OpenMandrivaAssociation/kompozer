@@ -153,7 +153,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc mozilla/LEGAL mozilla/LICENSE mozilla/README.txt
 %{_bindir}/*
-%{_libdir}/*
+%{_libdir}/%{name}/*
 %{_mandir}/man1/*
 %{_datadir}/myspell
 %{_datadir}/applications/mandriva-kompozer.desktop
