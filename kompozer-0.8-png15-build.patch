@@ -1,0 +1,193 @@
+diff -Naur kompozer-0.8.orig/mozilla/modules/libpr0n/decoders/png/nsPNGDecoder.cpp kompozer-0.8/mozilla/modules/libpr0n/decoders/png/nsPNGDecoder.cpp
+--- kompozer-0.8.orig/mozilla/modules/libpr0n/decoders/png/nsPNGDecoder.cpp	2009-05-02 18:39:49.000000000 +0200
++++ kompozer-0.8/mozilla/modules/libpr0n/decoders/png/nsPNGDecoder.cpp	2012-04-23 11:46:21.572483357 +0200
+@@ -171,7 +171,7 @@
+   }
+ 
+   // we need to do the setjmp here otherwise bad things will happen
+-  if (setjmp(decoder->mPNG->jmpbuf)) {
++  if (setjmp(png_jmpbuf(decoder->mPNG))) {
+     png_destroy_read_struct(&decoder->mPNG, &decoder->mInfo, NULL);
+ 
+     decoder->mError = PR_TRUE;
+@@ -227,7 +227,7 @@
+   if (width > MOZ_PNG_MAX_DIMENSION || height > MOZ_PNG_MAX_DIMENSION) {
+     nsPNGDecoder *decoder = NS_STATIC_CAST(nsPNGDecoder*,
+                                            png_get_progressive_ptr(png_ptr));
+-    longjmp(decoder->mPNG->jmpbuf, 1);
++    longjmp(png_jmpbuf(decoder->mPNG), 1);
+   }
+ #undef MOZ_PNG_MAX_DIMENSION
+ 
+@@ -307,7 +307,7 @@
+ 
+   decoder->mImage = do_CreateInstance("@mozilla.org/image/container;1");
+   if (!decoder->mImage)
+-    longjmp(decoder->mPNG->jmpbuf, 5); // NS_ERROR_OUT_OF_MEMORY
++    longjmp(png_jmpbuf(decoder->mPNG), 5); // NS_ERROR_OUT_OF_MEMORY
+ 
+   decoder->mImageLoad->SetImage(decoder->mImage);
+ 
+@@ -319,7 +319,7 @@
+ 
+   decoder->mFrame = do_CreateInstance("@mozilla.org/gfx/image/frame;2");
+   if (!decoder->mFrame)
+-    longjmp(decoder->mPNG->jmpbuf, 5); // NS_ERROR_OUT_OF_MEMORY
++    longjmp(png_jmpbuf(decoder->mPNG), 5); // NS_ERROR_OUT_OF_MEMORY
+ 
+   gfx_format format;
+ 
+@@ -341,7 +341,7 @@
+   // then initalize the frame and append it to the container
+   nsresult rv = decoder->mFrame->Init(0, 0, width, height, format, 24);
+   if (NS_FAILED(rv))
+-    longjmp(decoder->mPNG->jmpbuf, 5); // NS_ERROR_OUT_OF_MEMORY
++    longjmp(png_jmpbuf(decoder->mPNG), 5); // NS_ERROR_OUT_OF_MEMORY
+ 
+   decoder->mImage->AppendFrame(decoder->mFrame);
+ 
+@@ -362,7 +362,7 @@
+       decoder->ibpr = bpr;
+     decoder->interlacebuf = (PRUint8 *)nsMemory::Alloc(decoder->ibpr*height);
+     if (!decoder->interlacebuf) {
+-      longjmp(decoder->mPNG->jmpbuf, 5); // NS_ERROR_OUT_OF_MEMORY
++      longjmp(png_jmpbuf(decoder->mPNG), 5); // NS_ERROR_OUT_OF_MEMORY
+     }            
+   }
+ 
+@@ -555,7 +555,7 @@
+ error_callback(png_structp png_ptr, png_const_charp error_msg)
+ {
+   PR_LOG(gPNGLog, PR_LOG_ERROR, ("libpng error: %s\n", error_msg));
+-  longjmp(png_ptr->jmpbuf, 1);
++  longjmp(png_jmpbuf(png_ptr), 1);
+ }
+ 
+ 
+diff -Naur kompozer-0.8.orig/mozilla/modules/libpr0n/encoders/png/nsPNGEncoder.cpp kompozer-0.8/mozilla/modules/libpr0n/encoders/png/nsPNGEncoder.cpp
+--- kompozer-0.8.orig/mozilla/modules/libpr0n/encoders/png/nsPNGEncoder.cpp	2009-05-02 18:39:49.000000000 +0200
++++ kompozer-0.8/mozilla/modules/libpr0n/encoders/png/nsPNGEncoder.cpp	2012-04-23 11:46:21.547484094 +0200
+@@ -111,9 +111,9 @@
+ 
+   // initialize
+   png_struct* png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
+-                                                png_voidp_NULL,
+-                                                png_error_ptr_NULL,
+-                                                png_error_ptr_NULL);
++                                                NULL,
++                                                NULL,
++                                                NULL);
+   if (! png_ptr)
+     return NS_ERROR_OUT_OF_MEMORY;
+   png_info* info_ptr = png_create_info_struct(png_ptr);
+diff -Naur kompozer-0.8.orig/mozilla/xpcom/glue/nsBaseHashtable.h kompozer-0.8/mozilla/xpcom/glue/nsBaseHashtable.h
+--- kompozer-0.8.orig/mozilla/xpcom/glue/nsBaseHashtable.h	2009-05-02 18:43:39.000000000 +0200
++++ kompozer-0.8/mozilla/xpcom/glue/nsBaseHashtable.h	2012-04-23 11:46:21.495485626 +0200
+@@ -123,7 +123,7 @@
+    */
+   PRBool Get(KeyType aKey, UserDataType* pData) const
+   {
+-    EntryType* ent = GetEntry(aKey);
++    EntryType* ent = this->GetEntry(aKey);
+ 
+     if (!ent)
+       return PR_FALSE;
+@@ -142,7 +142,7 @@
+    */
+   PRBool Put(KeyType aKey, UserDataType aData)
+   {
+-    EntryType* ent = PutEntry(aKey);
++    EntryType* ent = this->PutEntry(aKey);
+ 
+     if (!ent)
+       return PR_FALSE;
+@@ -156,7 +156,7 @@
+    * remove the data for the associated key
+    * @param aKey the key to remove from the hashtable
+    */
+-  void Remove(KeyType aKey) { RemoveEntry(aKey); }
++  void Remove(KeyType aKey) { this->RemoveEntry(aKey); }
+ 
+   /**
+    * function type provided by the application for enumeration.
+diff -Naur kompozer-0.8.orig/mozilla/xpcom/glue/nsClassHashtable.h kompozer-0.8/mozilla/xpcom/glue/nsClassHashtable.h
+--- kompozer-0.8.orig/mozilla/xpcom/glue/nsClassHashtable.h	2009-05-02 18:43:39.000000000 +0200
++++ kompozer-0.8/mozilla/xpcom/glue/nsClassHashtable.h	2012-04-23 11:46:21.445487100 +0200
+@@ -98,7 +98,7 @@
+ nsClassHashtable<KeyClass,T>::Get(KeyType aKey, T** retVal) const
+ {
+   typename nsBaseHashtable<KeyClass,nsAutoPtr<T>,T*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
+@@ -126,7 +126,7 @@
+   PR_Lock(this->mLock);
+ 
+   typename nsBaseHashtableMT<KeyClass,nsAutoPtr<T>,T*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
+diff -Naur kompozer-0.8.orig/mozilla/xpcom/glue/nsInterfaceHashtable.h kompozer-0.8/mozilla/xpcom/glue/nsInterfaceHashtable.h
+--- kompozer-0.8.orig/mozilla/xpcom/glue/nsInterfaceHashtable.h	2009-05-02 18:43:39.000000000 +0200
++++ kompozer-0.8/mozilla/xpcom/glue/nsInterfaceHashtable.h	2012-04-23 11:46:21.457486748 +0200
+@@ -111,7 +111,7 @@
+   (KeyType aKey, UserDataType* pInterface) const
+ {
+   typename nsBaseHashtable<KeyClass, nsCOMPtr<Interface>, Interface*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
+@@ -139,7 +139,7 @@
+   (KeyType aKey, PRBool* aFound) const
+ {
+   typename nsBaseHashtable<KeyClass, nsCOMPtr<Interface>, Interface*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
+@@ -167,7 +167,7 @@
+   PR_Lock(this->mLock);
+ 
+   typename nsBaseHashtableMT<KeyClass, nsCOMPtr<Interface>, Interface*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
+diff -Naur kompozer-0.8.orig/mozilla/xpcom/glue/nsRefPtrHashtable.h kompozer-0.8/mozilla/xpcom/glue/nsRefPtrHashtable.h
+--- kompozer-0.8.orig/mozilla/xpcom/glue/nsRefPtrHashtable.h	2009-05-02 18:43:39.000000000 +0200
++++ kompozer-0.8/mozilla/xpcom/glue/nsRefPtrHashtable.h	2012-04-23 11:46:21.470486363 +0200
+@@ -112,7 +112,7 @@
+   (KeyType aKey, UserDataType* pRefPtr) const
+ {
+   typename nsBaseHashtable<KeyClass, nsRefPtr<RefPtr>, RefPtr*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
+@@ -140,7 +140,7 @@
+   (KeyType aKey, PRBool* aFound) const
+ {
+   typename nsBaseHashtable<KeyClass, nsRefPtr<RefPtr>, RefPtr*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
+@@ -168,7 +168,7 @@
+   PR_Lock(this->mLock);
+ 
+   typename nsBaseHashtableMT<KeyClass, nsRefPtr<RefPtr>, RefPtr*>::EntryType* ent =
+-    GetEntry(aKey);
++    this->GetEntry(aKey);
+ 
+   if (ent)
+   {
