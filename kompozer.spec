@@ -157,3 +157,119 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*
 %{_datadir}/myspell
 %{_datadir}/applications/mandriva-kompozer.desktop
+
+
+%changelog
+* Mon Apr 23 2012 Frank Kober <emuse@mandriva.org> 0.8-0.b3.3mdv2012.0
++ Revision: 792905
+- made a patch to fix build against libpng 1.5
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - mass rebuild
+
+* Wed Mar 09 2011 Zombie Ryushu <ryushu@mandriva.org> 0.8-0.b3.1
++ Revision: 643168
+- fix xt dep
+
+  + Stéphane Téletchéa <steletch@mandriva.org>
+    - Disable previously CVE patched upstream
+    - Fix release
+    - Update to 0.8 b3 version
+
+* Fri Dec 03 2010 Oden Eriksson <oeriksson@mandriva.com> 0.8-0.b1.6mdv2011.0
++ Revision: 606269
+- rebuild
+
+* Thu Mar 25 2010 Oden Eriksson <oeriksson@mandriva.com> 0.8-0.b1.5mdv2010.1
++ Revision: 527396
+- rebuilt against nss-3.12.6
+
+* Fri Feb 26 2010 Oden Eriksson <oeriksson@mandriva.com> 0.8-0.b1.4mdv2010.1
++ Revision: 511711
+- rebuild
+
+* Sun Jan 10 2010 Oden Eriksson <oeriksson@mandriva.com> 0.8-0.b1.3mdv2010.1
++ Revision: 488614
+- bump correct release
+- P1: security fix for CVE-2009-3560
+
+* Fri Nov 13 2009 Oden Eriksson <oeriksson@mandriva.com> 0.8-0.b1.2mdv2010.1
++ Revision: 465858
+- adjust the patch slightly (duh!)
+- fix correct release
+- bump release
+- P0: security fix related to CVE-2009-2625 (rediffed and re-added, duh!)
+- remove %%changelog
+
+* Thu Oct 29 2009 Jerome Martin <jmartin@mandriva.org> 0.8-0.b1.1mdv2010.1
++ Revision: 460133
+- Fixed BuildRequires
+- Fixed group
+- Fixed spec file
+- Updated to 0.8b1 using Fedora spec file
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - 0.8a4 (because 0.7.10 is not compatible with GTK 2.14 and higher, hence the crashes.)
+    - fixed build deps
+    - nuked redundant patches
+    - rediffed patches
+    - build against system nss/nspr libs and require the latest ones
+
+* Mon Aug 24 2009 Oden Eriksson <oeriksson@mandriva.com> 0.7.10-6mdv2010.0
++ Revision: 420377
+- P21: security fix related to CVE-2009-2625
+
+* Sat Aug 22 2009 Funda Wang <fwang@mandriva.org> 0.7.10-5mdv2010.0
++ Revision: 419660
+- fix wformat patch
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - adjust the two latest patches a bit
+
+  + Christophe Fergeau <cfergeau@mandriva.com>
+    - fix -Wformat warnings
+    - fix gcc 4.4 compilation (empty #elif)
+
+* Fri Dec 12 2008 Adam Williamson <awilliamson@mandriva.org> 0.7.10-4mdv2009.1
++ Revision: 313552
+- add overflow.patch (fixes the buffer overflow that caused kompozer to crash
+  immediately on run, thanks Willem van Engen) (#44830)
+- rediff mandriva.patch
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - lowercase ImageMagick
+
+* Mon Sep 29 2008 Adam Williamson <awilliamson@mandriva.org> 0.7.10-3mdv2009.0
++ Revision: 289888
+- disable underlinking protection as there's an internal issue which cannot
+  be easily fixed
+- add underlinking.patch: fixes an external underlinking issue
+- rebuild for 2009
+
+  + Pixel <pixel@mandriva.com>
+    - rpm filetriggers deprecates update_menus/update_scrollkeeper/update_mime_database/update_icon_cache/update_desktop_database/post_install_gconf_schemas
+
+* Sun Jan 13 2008 Thierry Vignaud <tv@mandriva.org> 0.7.10-2mdv2008.1
++ Revision: 150433
+- rebuild
+- kill re-definition of %%buildroot on Pixel's request
+
+  + Olivier Blin <blino@mandriva.org>
+    - restore BuildRoot
+
+* Tue Sep 18 2007 Adam Williamson <awilliamson@mandriva.org> 0.7.10-1mdv2008.0
++ Revision: 89389
+- adjust some paths due to an upstream change in directory naming
+- fix menu categories (#33660)
+- correct build date
+
+  + Funda Wang <fwang@mandriva.org>
+    - 0.7.10 final
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill desktop-file-validate's 'warning: key "Encoding" in group "Desktop Entry" is deprecated'
+
+* Mon Aug 20 2007 Adam Williamson <awilliamson@mandriva.org> 0.7.10-0.rc6.1mdv2008.0
++ Revision: 68024
+- Import kompozer
+
