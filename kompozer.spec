@@ -1,3 +1,6 @@
+%define _enable_debug_packages %{nil}
+%define debug_package          %{nil}
+
 %define name    kompozer
 %define version 0.8
 %define pre b3
