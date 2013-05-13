@@ -7,7 +7,7 @@
 %if %pre
 %define release %mkrel -c %pre 3
 %else
-%define release %mkrel 2
+%define release  3
 %endif
 
 %define cairo_version 0.5
@@ -45,7 +45,6 @@ BuildRequires:  pkgconfig(libIDL-2.0)
 BuildRequires:	zip
 Provides:       nvu = 1
 Obsoletes:      nvu < 1
-BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 A complete Web authoring system for Linux Desktop users, similar to
