@@ -40,8 +40,8 @@ BuildRequires:  pkgconfig(pangox)
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel libxt-devel
 BuildRequires:  gnome-vfs2-devel
-BuildRequires:  libxft-devel
-BuildRequires:  libIDL2-devel
+BuildRequires:  pkgconfig(xft)
+BuildRequires:  pkgconfig(libIDL-2.0)
 BuildRequires:	zip
 Provides:       nvu = 1
 Obsoletes:      nvu < 1
