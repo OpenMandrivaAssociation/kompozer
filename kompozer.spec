@@ -38,7 +38,7 @@ BuildRequires:  nss-static-devel >= %{minimum_build_nss_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  pkgconfig(pangox)
 BuildRequires:  desktop-file-utils
-BuildRequires:  gtk2-devel libxt-devel
+BuildRequires:  pkgconfig(gtk+-2.0) libxt-devel
 BuildRequires:  gnome-vfs2-devel
 BuildRequires:  pkgconfig(xft)
 BuildRequires:  pkgconfig(libIDL-2.0)
