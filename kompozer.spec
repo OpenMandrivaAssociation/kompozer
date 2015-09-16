@@ -1,5 +1,6 @@
 %define _enable_debug_packages %{nil}
 %define debug_package          %{nil}
+%define _disable_lto 1
 
 %define name    kompozer
 %define version 0.8
@@ -31,6 +32,8 @@ Source0:    http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}-src.ta
 Source1:        kompozer-debian-manpage.bz2
 Patch1:		kompozer-0.8b1-CVE-2009-3560.diff
 Patch2:		kompozer-0.8-png15-build.patch
+Patch3:		kompozer-0.8b3-NS_DEFCALL.patch
+Patch4:		kompozer-0.8b3-freetype.patch
 BuildRequires:  nspr-devel >= %{minimum_build_nspr_version}
 BuildRequires:  nss-devel >= %{minimum_build_nss_version}
 BuildRequires:  nss-static-devel >= %{minimum_build_nss_version}
@@ -79,6 +82,9 @@ Features
 %apply_patches
 
 %build
+export CC=gcc
+export CXX=g++
+
 cd mozilla/
 cp composer/config/mozconfig.fedora .mozconfig
 #echo "mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-kompozer" >> .mozconfig

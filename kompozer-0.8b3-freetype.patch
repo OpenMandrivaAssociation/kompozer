@@ -1,0 +1,61 @@
+diff -up ./mozilla/config/system-headers.ft ./mozilla/config/system-headers
+--- ./mozilla/config/system-headers.ft	2015-01-01 12:42:07.999485865 +0200
++++ ./mozilla/config/system-headers	2015-01-01 12:43:58.220184713 +0200
+@@ -199,6 +199,12 @@ freetype/ftglyph.h
+ freetype/ftoutln.h
+ freetype/ttnameid.h
+ freetype/tttables.h
++freetype.h
++ftcache.h
++ftglyph.h
++ftoutln.h
++ttnameid.h
++tttables.h
+ fribidi/fribidi.h
+ FSp_fopen.h
+ fstream.h
+diff -up ./mozilla/gfx/src/cairo/nsFontMetricsXft.cpp.ft ./mozilla/gfx/src/cairo/nsFontMetricsXft.cpp
+--- ./mozilla/gfx/src/cairo/nsFontMetricsXft.cpp.ft	2015-01-01 12:47:03.315961703 +0200
++++ ./mozilla/gfx/src/cairo/nsFontMetricsXft.cpp	2015-01-01 12:47:46.402280342 +0200
+@@ -67,8 +67,9 @@
+ #include "nsFontConfigUtils.h"
+ 
+ #include <gdk/gdkx.h>
+-#include <freetype/tttables.h>
+-#include <freetype/freetype.h>
++#include <ft2build.h>
++#include FT_FREETYPE_H
++#include FT_TRUETYPE_TABLES_H
+ 
+ #define FORCE_PR_LOG
+ #include "prlog.h"
+diff -up ./mozilla/gfx/src/gtk/nsFontMetricsPango.cpp.ft ./mozilla/gfx/src/gtk/nsFontMetricsPango.cpp
+--- ./mozilla/gfx/src/gtk/nsFontMetricsPango.cpp.ft	2015-01-01 12:48:13.727214038 +0200
++++ ./mozilla/gfx/src/gtk/nsFontMetricsPango.cpp	2015-01-01 12:48:58.576463882 +0200
+@@ -58,7 +58,10 @@
+ #include <fontconfig/fontconfig.h>
+ #include <gdk/gdk.h>
+ #include <gdk/gdkx.h>
+-#include <freetype/tttables.h>
++
++#include <ft2build.h>
++#include FT_FREETYPE_H
++#include FT_TRUETYPE_TABLES_H
+ 
+ #include "mozilla-decoder.h"
+ 
+diff -up ./mozilla/gfx/src/gtk/nsFontMetricsXft.cpp.ft ./mozilla/gfx/src/gtk/nsFontMetricsXft.cpp
+--- ./mozilla/gfx/src/gtk/nsFontMetricsXft.cpp.ft	2015-01-01 12:44:51.284113994 +0200
++++ ./mozilla/gfx/src/gtk/nsFontMetricsXft.cpp	2015-01-01 12:46:12.501944623 +0200
+@@ -67,8 +67,9 @@
+ #include "nsFontConfigUtils.h"
+ 
+ #include <gdk/gdkx.h>
+-#include <freetype/tttables.h>
+-#include <freetype/freetype.h>
++#include <ft2build.h>
++#include FT_FREETYPE_H
++#include FT_TRUETYPE_TABLES_H
+ 
+ #define FORCE_PR_LOG
+ #include "prlog.h"
