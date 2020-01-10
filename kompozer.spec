@@ -79,7 +79,7 @@ Features
 
 %prep
 %setup -q -c %{name}-%{version}
-%apply_patches
+%autopatch -p1
 
 %build
 export CC=gcc
