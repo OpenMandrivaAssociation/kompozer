@@ -23,7 +23,7 @@ Release:        %{release}
 Summary:        Web Authoring System
 Group:          Development/Other
 License:        GPLv2+ or LGPLv2+ or MPL
-URL:            http://www.kompozer.net/
+URL:            https://www.kompozer.net/
 %if %pre
 Source0:    http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}%{pre}-src.tar.bz2
 %else
