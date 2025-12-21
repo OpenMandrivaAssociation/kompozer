@@ -34,6 +34,7 @@ Patch1:		kompozer-0.8b1-CVE-2009-3560.diff
 Patch2:		kompozer-0.8-png15-build.patch
 Patch3:		kompozer-0.8b3-NS_DEFCALL.patch
 Patch4:		kompozer-0.8b3-freetype.patch
+BuildRequires:	make
 BuildRequires:  nspr-devel >= %{minimum_build_nspr_version}
 BuildRequires:  nss-devel >= %{minimum_build_nss_version}
 BuildRequires:  nss-static-devel >= %{minimum_build_nss_version}
